@@ -1,51 +1,55 @@
 import React, { useEffect, useState } from "react";
 import ProductList from "./components/ProductList";
 import Cart from "./components/Cart";
-
-const products = [
-  { id: 1, name: "Product 1", price: 10 },
-  { id: 2, name: "Product 2", price: 20 },
-  { id: 3, name: "Product 3", price: 30 },
-  { id: 1, name: "Product 1", price: 10 },
-  { id: 2, name: "Product 2", price: 20 },
-  { id: 3, name: "Product 3", price: 30 },
-  { id: 1, name: "Product 1", price: 10 },
-  { id: 2, name: "Product 2", price: 20 },
-  { id: 3, name: "Product 3", price: 30 },
-];
+import axios from "axios";
 
 const App = () => {
   const [cart, setCart] = useState([]);
   const [total, setTotal] = useState(0);
+  const [products, setProducts] = useState(null);
+
+  const getProducts = async () => {
+    await axios.get(`${import.meta.env.VITE_BASE_URL}products`).then((res) => {
+      setProducts(res.data.data);
+    });
+  };
 
   const removeItem = (index) => {
-      setCart([...cart.slice(0, index), ...cart.slice(index + 1)]);
-    };
+    const newArray = cart.splice(index, 1);
+    
+    setCart(newArray);
+    console.log(cart);
+  };
 
-  useEffect(() => {
+
     const calculateTotal = () => {
       let totalPrice = 0;
       for (let i = 0; i < cart.length; i++) {
-        totalPrice = totalPrice + cart[i].price;
+        totalPrice = totalPrice + parseInt(cart[i]?.price);
       }
       setTotal(totalPrice);
     };
-    calculateTotal();
-  }, [total, cart]);
+    
+  useEffect(() => {
+    if(products === null) {
+      getProducts();
+    }
+    if(cart.length > 0  && products !== null ){
+      calculateTotal();
+    }
+  }, [total, cart, products]);
 
   const handleAddToCart = (product) => {
     setCart([...cart, product]);
   };
 
   return (
-    <div className="w-[100vw] mx-auto bg-[#707070] min-h-screen sm:pt-[10%]">
-      <div className="w-[100vw] h-[10%] absolute bottom-0 sm:top-0 fixed flex justify-between items-center bg-white p-4 shadow-md shadow-black">
-        <h3 className="md:text-2xl font-bold text-black p-2">
-          Fortune Sales
-        </h3>
-        <Cart cart={cart} removeItem={()=>removeItem()} total={total}/>
+    <div className="relative w-[100vw] mx-auto bg-white min-h-screen sm:pt-[10%]">
+      <div className="w-[100vw] h-[10%] absolute bottom-0 sm:top-0 fixed flex justify-between items-center bg-purple-500 p-4 shadow-lg sm:border-b border-t border-gray-200">
+        <h3 className="sm:text-2xl font-bold text-white p-2 animate-pulse">Gem</h3>
+        <Cart cart={cart} removeItem={() => removeItem()} total={total} />
       </div>
-      <ProductList products={products} onAddToCart={handleAddToCart} />
+      {products && <ProductList products={products} onAddToCart={handleAddToCart} />}
     </div>
   );
 };
