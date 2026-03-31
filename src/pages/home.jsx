@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { FaRegCircleDot } from "react-icons/fa6";
+import { FaRegCircleDot, FaUser } from "react-icons/fa6";
 import Cart from "../components/Cart";
 import ProductList from "../components/ProductList";
-import { LuLogOut } from "react-icons/lu";
 import { Link } from "react-router-dom";
-import { BiUser } from "react-icons/bi";
 import BackGround from "../assets/background.jpeg";
+import { RiUserCommunityFill } from "react-icons/ri";
+import { CgLogOff } from "react-icons/cg";
 
 export default function HomePage() {
   const [cart, setCart] = useState([]);
@@ -61,32 +61,29 @@ export default function HomePage() {
       <img src={BackGround} alt="back" className="h-screen blur" />
       <div className="absolute top-0 left-0 w-full h-full">
         <div className="relative w-[100vw] mx-auto  min-h-screen sm:pt-[10%]">
-          <div className="w-[100vw] h-[8vh] absolute bottom-0 sm:top-0 fixed flex justify-between items-center bg-purple-500 p-4 shadow-lg sm:border-b border-t border-gray-200">
+          <div className="w-[100vw] h-[8vh] absolute bottom-0 sm:top-0 fixed flex justify-between items-center bg-purple-500 text-white p-4 shadow-lg sm:border-b border-t border-gray-200">
             <h3 className="sm:text-2xl font-bold text-white p-2 animate-pulse">
               Gem
             </h3>
-            <p className="flex gap-2 items-center ">
+            <p className="flex items-center">
               <Cart
-                className="hover:bg-[#ffda73] p-[1rem] rounded-md "
+                className="hover:bg-[#ecececaa] p-[1rem] rounded-md text-white"
                 cart={cart}
                 removeItem={() => removeItem()}
                 total={total}
               />
+
               <Link
                 to={"/profile"}
-                className="hover:bg-[#ffda73] p-[1rem] rounded-md text-white"
+                className="hover:bg-[#ecececaa] p-[1rem] rounded-md "
               >
-                <BiUser
-                  size={30}
-                  color="#ffffff"
-                  className="hover:bg-[#ffda73] p-[1rem] rounded-md "
-                />
+                <RiUserCommunityFill size={30} color="white" />
               </Link>
               <Link
                 to={"/"}
-                className="hover:bg-[#ffda73] p-[1rem] rounded-md "
+                className="hover:bg-[#ecececaa] p-[1rem] rounded-md "
               >
-                <LuLogOut color="red" size={30} />
+                <CgLogOff color="red" size={30} />
               </Link>
             </p>
           </div>

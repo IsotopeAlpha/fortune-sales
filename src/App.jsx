@@ -2,8 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Login from "./pages/login";
 import Register from "./pages/register";
 import HomePage from "./pages/home";
-import './App.css'; 
-
+import Profile from "./pages/profile";
 
 function App() {
   return (
@@ -12,6 +11,7 @@ function App() {
       <Route element={<Login />} path="/" />
       <Route element={<Register />} path="/register" />
       <Route element={<HomePage />} path="/home" />
+      <Route element={<Profile />} path="/profile" />
     </Routes>
     </BrowserRouter>
   );
