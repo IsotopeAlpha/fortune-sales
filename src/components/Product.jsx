@@ -1,23 +1,21 @@
 import React, { useState } from "react";
 import { BiChevronDown, BiChevronUp } from "react-icons/bi";
-import { BsCurrencyExchange } from "react-icons/bs";
-import { CiMoneyBill } from "react-icons/ci";
-import { FaDollarSign } from "react-icons/fa6";
+
 
 const Product = ({ product, onAddToCart }) => {
   const [viewMore, setViewMore] = useState(false);
 
   return (
-    <div className=" bg-purple-500  text-white p-2 rounded-md border border-purple-200 m-4 sm:w-fit w-[40vw] h-fit hover:transition-transform hover:scale-105 hover:shadow-lg flex flex-col items-center">
+    <div className=" bg-purple-500  text-white p-2 rounded-md border border-purple-200 m-4 sm:w-fit min-w-fit w-[30vw] h-fit hover:transition-transform hover:scale-105 hover:shadow-lg flex flex-col items-center">
       <img
         src={
           product?.imageUrl ||
           `https://via.placeholder.com/150?text=${product.image}`
         }
         alt={product.name}
-        className=" h-[100px]  sm:h-[150px] object-cover mb-2 bg-white rounded-md shadow-md"
+        className=" h-[80px]  sm:h-[150px] object-cover mb-2 bg-white rounded-md shadow-md"
       />
-      <div className="flex justify-between items-center w-full">
+      <div className="flex justify-between items-center w-full gap-2">
         <h3 className="sm:text-lg font-bold">{product.name}</h3>
         <p
           onClick={() => setViewMore(!viewMore)}

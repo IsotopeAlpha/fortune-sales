@@ -8,7 +8,7 @@ const Cart = ({ cart, removeItem, total }) => {
   return (
     <>
       {viewCart ? (
-        <div className="absolute absolute left-0 bottom-0 sm:top-0 bg-purple-500 text-white p-4 rounded-md w-full h-[50vh] p-4 shadow-md transition-transform transform translate-y-0 sm:translate-y-0 overflow-y-auto">
+        <div className="absolute absolute left-0 bottom-0 sm:top-0 bg-purple-500 text-white p-4 rounded-xl w-full h-[50vh] p-4 shadow-lg transition-transform transform translate-y-0 sm:translate-y-0 overflow-y-auto border-t border-gray-200">
           {cart.length > 0 ? (
             <>
               {" "}
