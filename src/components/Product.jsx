@@ -6,7 +6,7 @@ const Product = ({ product, onAddToCart }) => {
   const [viewMore, setViewMore] = useState(false);
 
   return (
-    <div className=" bg-purple-500  text-white p-2 rounded-md border border-purple-200 m-4 sm:w-fit min-w-fit w-[30vw] h-fit hover:transition-transform hover:scale-105 hover:shadow-lg flex flex-col items-center">
+    <div className=" bg-gray-200  text-white p-2 rounded-md border border-purple-200 m-4 sm:w-fit min-w-fit w-[30vw] h-fit hover:transition-transform hover:scale-105 hover:shadow-lg flex flex-col items-center">
       <img
         src={
           product?.imageUrl ||
@@ -19,14 +19,14 @@ const Product = ({ product, onAddToCart }) => {
         <h3 className="sm:text-lg font-bold">{product.name}</h3>
         <p
           onClick={() => setViewMore(!viewMore)}
-          className="text-white text-sm mb-2 underline cursor-pointer"
+          className="text-white text-sm mb-2 underline cursor-pointer items-center justify-center flex gap-1 hover:text-purple-700 hover:font-bold"
         >
           {viewMore ? (
-            <p className="flex items-center">
+            <p className="flex items-center justify-center">
               Collapse <BiChevronUp />
             </p>
           ) : (
-            <p className="flex items-center">
+            <p className="flex items-center justify-center">
               Details <BiChevronDown />
             </p>
           )}

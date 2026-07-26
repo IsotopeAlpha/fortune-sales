@@ -26,6 +26,7 @@ export default function HomePage() {
     console.log(cart);
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const calculateTotal = () => {
     let totalPrice = 0;
     for (let i = 0; i < cart.length; i++) {
@@ -41,7 +42,7 @@ export default function HomePage() {
     if (cart.length > 0 && products !== null) {
       calculateTotal();
     }
-  }, [total, cart, products]);
+  }, [total, cart, products, calculateTotal]);
 
   const handleAddToCart = (product) => {
     setCart([...cart, product]);
@@ -58,7 +59,7 @@ export default function HomePage() {
     </p>
   ) : (
     <>
-      <img src={BackGround} alt="back" className="h-screen blur" />
+      <img src={BackGround} alt="back" className="h-screen blur-[2px]" />
       <div className="absolute top-0 left-0 w-full h-full">
         <div className="relative w-[100vw] mx-auto  min-h-screen sm:pt-[10%]">
           <div className="w-[100vw] h-[8vh] absolute bottom-0 sm:top-0 fixed flex justify-between items-center bg-purple-500 text-white p-4 shadow-lg sm:border-b border-t border-gray-200">
