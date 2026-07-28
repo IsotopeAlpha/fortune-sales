@@ -1,15 +1,23 @@
-import React, { useState } from 'react';
+import axios from "axios";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function OrderPage() {
-  const [cart, setCart] = useState([]);
+  const navigate = useNavigate();
+  const [cart, setCart] = useState(
+    JSON.parse(localStorage.getItem("cart")) || [],
+  );
   const [customerInfo, setCustomerInfo] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    address: '',
-    city: '',
-    postalCode: '',
+    name: "",
+    email: "",
+    phone: "",
+    address: "",
+    city: "",
+    postalCode: "",
   });
+  const [loading, setLoading] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -29,159 +37,270 @@ export default function OrderPage() {
     } else {
       setCart((prev) =>
         prev.map((item, i) =>
-          i === index ? { ...item, quantity: parseInt(quantity) } : item
-        )
+          i === index ? { ...item, quantity: parseInt(quantity) } : item,
+        ),
       );
     }
   };
 
-  const handlePlaceOrder = (e) => {
+  const handlePlaceOrder = async(e) => {
     e.preventDefault();
     if (cart.length === 0) {
-      alert('Cart is empty. Add items before placing an order.');
+      toast.error("Cart is empty. Add items before placing an order.");
       return;
     }
     if (!customerInfo.name || !customerInfo.email || !customerInfo.address) {
-      alert('Please fill in all required fields.');
+      toast.error("Please fill in all required fields.");
       return;
     }
-    console.log('Order placed:', { customerInfo, cart });
-    alert('Order placed successfully!');
+    setLoading(true);
+
+    const data = {
+      name: customerInfo.name,
+      email: customerInfo.email,
+      phone: customerInfo.phone,
+      address: customerInfo.address,
+      city: customerInfo.city,
+      postalCode: customerInfo.postalCode,
+      products:cart,
+      totalAmount: cart.reduce(
+        (sum, item) => sum + item.price * item.quantity,
+        0,
+      ),
+    };
+    console.log("Placing order with data:", data);
+     try {
+      await axios
+        .post(`${import.meta.env.VITE_BASE_URL}orders`, data)
+        .then((res) => {
+          console.log("Order response:", res.data);
+
+          if (res.data.status === "error") {
+            setLoading(false);
+            toast.error(res.data.message);
+          } else {
+            setLoading(false);
+            toast.success("Order placed successfully!");
+            setCart([]);
+            localStorage.removeItem("cart");
+            
+          } 
+        });
+    } catch (error) {
+      throw error;
+    }
+    console.log("Order placed:", { customerInfo, cart });
     setCart([]);
-    setCustomerInfo({
-      name: '',
-      email: '',
-      phone: '',
-      address: '',
-      city: '',
-      postalCode: '',
-    });
+    
   };
 
-  const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const totalPrice = cart.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0,
+  );
 
   return (
-    <div className="order-page">
-      <h1>Your Order</h1>
-      
-      <div className="order-container">
-        <section className="cart-section">
-          <h2>Shopping Cart</h2>
-          {cart.length === 0 ? (
-            <p className="empty-cart">Your cart is empty</p>
-          ) : (
-            <div className="cart-items">
-              {cart.map((item, index) => (
-                <div key={index} className="cart-item">
-                  <div className="item-details">
-                    <h3>{item.name}</h3>
-                    <p className="item-price">${item.price.toFixed(2)}</p>
-                  </div>
-                  <div className="item-quantity">
-                    <label htmlFor={`qty-${index}`}>Quantity:</label>
-                    <input
-                      id={`qty-${index}`}
-                      type="number"
-                      min="1"
-                      value={item.quantity}
-                      onChange={(e) => handleUpdateQuantity(index, e.target.value)}
-                    />
-                  </div>
-                  <div className="item-subtotal">
-                    <p>${(item.price * item.quantity).toFixed(2)}</p>
-                  </div>
-                  <button
-                    className="remove-btn"
-                    onClick={() => handleRemoveItem(index)}
+    <div className="min-h-screen bg-slate-50 text-slate-900 py-10 px-4">
+      <ToastContainer />
+      <button
+        type="button"
+        onClick={() => navigate(-1)}
+        className="mb-8 inline-flex items-center rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm transition hover:border-slate-400 hover:bg-slate-50"
+      >
+        ← Back
+      </button>
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <h1 className="text-3xl sm:text-mxl font-semibold tracking-tight text-slate-900 mb-8">
+          Your Order
+        </h1>
+
+        <div className="grid gap-8 lg:grid-cols-[1.5fr_1fr]">
+          <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+            <h2 className="text-2xl sm:text-md font-semibold text-slate-900 mb-5">
+              Shopping Cart
+            </h2>
+            {cart.length === 0 ? (
+              <p className="rounded-2xl bg-slate-100 px-4 py-6 text-slate-600">
+                Your cart is empty
+              </p>
+            ) : (
+              <div className="space-y-4">
+                {cart.map((item, index) => (
+                  <div
+                    key={index}
+                    className="rounded-3xl border border-slate-200 bg-slate-50 p-4 shadow-sm sm:flex sm:items-center sm:justify-between"
                   >
-                    Remove
-                  </button>
+                    <div className="space-y-2 sm:flex-1">
+                      <h3 className="text-lg font-medium text-slate-900">
+                        {item?.name}
+                      </h3>
+                      <p className="text-sm text-slate-600">GH¢{item?.price}</p>
+                    </div>
+
+                    <div className="mt-4 flex flex-col gap-3 sm:mt-0 sm:w-64">
+                      <label
+                        className="text-sm font-medium text-slate-700"
+                        htmlFor={`qty-GH¢{index}`}
+                      >
+                        Quantity
+                      </label>
+                      <input
+                        id={`qty-GH¢{index}`}
+                        type="number"
+                        min="1"
+                        value={item?.quantity}
+                        onChange={(e) =>
+                          handleUpdateQuantity(index, e.target.value)
+                        }
+                        className="w-full rounded-2xl border border-slate-300 bg-white px-4 py-2 text-slate-900 focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-200"
+                      />
+                      <p className="text-sm font-medium text-slate-700">
+                        Subtotal: GH¢
+                        {(item?.price || 0) * (item?.quantity || 0)}
+                      </p>
+                      <button
+                        className="inline-flex justify-center rounded-2xl bg-red-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-red-700"
+                        onClick={() => handleRemoveItem(index)}
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  </div>
+                ))}
+
+                <div className="rounded-3xl bg-slate-900 px-6 py-5 text-white shadow-sm">
+                  <h3 className="text-lg font-semibold">
+                    Total: GH¢{totalPrice.toFixed(2)}
+                  </h3>
                 </div>
-              ))}
-              <div className="cart-total">
-                <h3>Total: ${totalPrice.toFixed(2)}</h3>
               </div>
-            </div>
-          )}
-        </section>
+            )}
+          </section>
 
-        <section className="customer-info-section">
-          <h2>Shipping Information</h2>
-          <form onSubmit={handlePlaceOrder}>
-            <div className="form-group">
-              <label htmlFor="name">Name *</label>
-              <input
-                id="name"
-                type="text"
-                name="name"
-                value={customerInfo.name}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
+          <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+            <h2 className="text-2xl sm:text-md font-semibold text-slate-900 mb-5">
+              Shipping Information
+            </h2>
+            <form onSubmit={handlePlaceOrder} className="space-y-4">
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="space-y-2">
+                  <label
+                    htmlFor="name"
+                    className="text-sm font-medium text-slate-700"
+                  >
+                    Name *
+                  </label>
+                  <input
+                    id="name"
+                    type="text"
+                    name="name"
+                    value={customerInfo.name}
+                    onChange={handleInputChange}
+                    required
+                    className="w-full rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3 text-slate-900 focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-200"
+                  />
+                </div>
 
-            <div className="form-group">
-              <label htmlFor="email">Email *</label>
-              <input
-                id="email"
-                type="email"
-                name="email"
-                value={customerInfo.email}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
+                <div className="space-y-2">
+                  <label
+                    htmlFor="email"
+                    className="text-sm font-medium text-slate-700"
+                  >
+                    Email *
+                  </label>
+                  <input
+                    id="email"
+                    type="email"
+                    name="email"
+                    value={customerInfo.email}
+                    onChange={handleInputChange}
+                    required
+                    className="w-full rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3 text-slate-900 focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-200"
+                  />
+                </div>
+              </div>
 
-            <div className="form-group">
-              <label htmlFor="phone">Phone</label>
-              <input
-                id="phone"
-                type="tel"
-                name="phone"
-                value={customerInfo.phone}
-                onChange={handleInputChange}
-              />
-            </div>
+              <div className="space-y-2">
+                <label
+                  htmlFor="phone"
+                  className="text-sm font-medium text-slate-700"
+                >
+                  Phone
+                </label>
+                <input
+                  id="phone"
+                  type="tel"
+                  name="phone"
+                  value={customerInfo.phone}
+                  onChange={handleInputChange}
+                  className="w-full rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3 text-slate-900 focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-200"
+                />
+              </div>
 
-            <div className="form-group">
-              <label htmlFor="address">Address *</label>
-              <input
-                id="address"
-                type="text"
-                name="address"
-                value={customerInfo.address}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
+              <div className="space-y-2">
+                <label
+                  htmlFor="address"
+                  className="text-sm font-medium text-slate-700"
+                >
+                  Address *
+                </label>
+                <input
+                  id="address"
+                  type="text"
+                  name="address"
+                  value={customerInfo.address}
+                  onChange={handleInputChange}
+                  required
+                  className="w-full rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3 text-slate-900 focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-200"
+                />
+              </div>
 
-            <div className="form-group">
-              <label htmlFor="city">City</label>
-              <input
-                id="city"
-                type="text"
-                name="city"
-                value={customerInfo.city}
-                onChange={handleInputChange}
-              />
-            </div>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="space-y-2">
+                  <label
+                    htmlFor="city"
+                    className="text-sm font-medium text-slate-700"
+                  >
+                    City
+                  </label>
+                  <input
+                    id="city"
+                    type="text"
+                    name="city"
+                    value={customerInfo.city}
+                    onChange={handleInputChange}
+                    className="w-full rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3 text-slate-900 focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-200"
+                  />
+                </div>
 
-            <div className="form-group">
-              <label htmlFor="postalCode">Postal Code</label>
-              <input
-                id="postalCode"
-                type="text"
-                name="postalCode"
-                value={customerInfo.postalCode}
-                onChange={handleInputChange}
-              />
-            </div>
+                <div className="space-y-2">
+                  <label
+                    htmlFor="postalCode"
+                    className="text-sm font-medium text-slate-700"
+                  >
+                    Postal Code
+                  </label>
+                  <input
+                    id="postalCode"
+                    type="text"
+                    name="postalCode"
+                    value={customerInfo.postalCode}
+                    onChange={handleInputChange}
+                    className="w-full rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3 text-slate-900 focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-200"
+                  />
+                </div>
+              </div>
 
-            <button type="submit" className="place-order-btn">
-              Place Order
-            </button>
-          </form>
-        </section>
+              <button
+                type="submit"
+                onClick={handlePlaceOrder}
+                className="w-full rounded-3xl bg-slate-900 px-6 py-3 text-base font-semibold text-white transition hover:bg-slate-800"
+              >
+                {loading ? "Placing Order..." : "Place Order"}
+              </button>
+            </form>
+          </section>
+        </div>
       </div>
     </div>
   );

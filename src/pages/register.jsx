@@ -62,71 +62,88 @@ export default function Register() {
 
 
   return (
-    <div className="w-[100vw] h-[100vh] bg-purple-500 flex justify-center items-center">
-      <ToastContainer />
-      <form
-        action="post"
-        className="flex flex-col gap-[20px] sm:w-full rounded-sm h-fit p-[30px] justify-center items-center overflow-auto"
-      >
-        <MyTextbox
-          type="email"
-          label="Email"
-          width="sm:w-[35vw] w-[80vw]"
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <MyTextbox
-          label="Full Name"
-          width="sm:w-[35vw] w-[80vw]"
-          onChange={(e) => setName(e.target.value)}
-        />
-        <div>
-          <div className="font-bold">Gender</div>
-          <select
-            className="sm:w-[35vw] w-[80vw] h-[40px] rounded-[4px] bg-[#f8f5f0]"
-            onChange={(e) => setGender(e.target.value)}
-          >
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-          </select>
-        </div>
-        <MyTextbox
-          label="Phone"
-          type="number"
-          width="sm:w-[35vw] w-[80vw]"
-          onChange={(e) => setPhone(e.target.value)}
-        />
-        <div>
-          <div className="font-bold">Password</div>
-          <div className="relative">
-            <input
-              type={passwordType}
-              className={`bg-[#f8f5f0] placeholder-black sm:w-[35vw] w-[80vw] h-[40px] px-2 rounded-[4px]`}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            {passwordType === "password" ? (
-              <HiEye
-                className="absolute text-black right-[10px] top-[12px] bottom-[10px]"
-                onClick={togglePassword}
-              />
-            ) : (
-              <HiEyeOff
-                className="absolute text-black right-[10px] top-[15px] bottom-[10px]"
-                onClick={togglePassword}
-              />
-            )}
+    <div className="min-h-screen min-w-screen bg-slate-900 flex items-center justify-center px-4 py-10">
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} theme="colored" />
+      <div className="relative w-full max-w-2xl overflow-hidden rounded-[32px] border border-white/20 bg-white/90 p-6 shadow-2xl backdrop-blur-xl sm:p-10">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(236,72,153,0.18),_transparent_35%),radial-gradient(circle_at_bottom_right,_rgba(79,70,229,0.16),_transparent_35%)] pointer-events-none" />
+        <div className="relative flex flex-col gap-8">
+          <div className="space-y-3 text-center">
+            <p className="text-sm font-semibold uppercase tracking-[0.35em] text-purple-600">Create account</p>
+            <h1 className="text-3xl font-bold text-slate-900 sm:text-4xl">Start your Gem journey</h1>
+            <p className="mx-auto max-w-xl text-sm text-slate-600 sm:text-base">
+              Register your account to unlock customer insights, manage leads, and grow your business with ease.
+            </p>
           </div>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleRegister();
+            }}
+            className="flex flex-col gap-5"
+          >
+            <MyTextbox
+              type="email"
+              label="Email"
+              width="sm:w-[35vw] w-full"
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <MyTextbox
+              label="Full Name"
+              width="sm:w-[35vw] w-full"
+              onChange={(e) => setName(e.target.value)}
+            />
+            <div className="flex flex-col gap-2">
+              <span className="font-semibold text-slate-800">Gender</span>
+              <select
+                className="w-full sm:w-[35vw] h-[44px] rounded-[12px] border border-slate-200 bg-slate-50 px-3 text-slate-900 transition duration-300 ease-in-out focus:border-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-200"
+                onChange={(e) => setGender(e.target.value)}
+                value={gender}
+              >
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+              </select>
+            </div>
+            <MyTextbox
+              label="Phone"
+              type="number"
+              width="sm:w-[35vw] w-full"
+              onChange={(e) => setPhone(e.target.value)}
+            />
+            <div className="flex flex-col gap-2">
+              <span className="font-semibold text-slate-800">Password</span>
+              <div className="relative">
+                <input
+                  type={passwordType}
+                  className="w-full sm:w-[35vw] h-[44px] rounded-[12px] border border-slate-200 bg-slate-50 px-3 text-slate-900 transition duration-300 ease-in-out focus:border-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-200"
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                {passwordType === "password" ? (
+                  <HiEye
+                    className="absolute right-3 top-1/2 h-5 w-5 -translate-y-1/2 cursor-pointer text-slate-500 transition duration-300 hover:text-slate-900"
+                    onClick={togglePassword}
+                  />
+                ) : (
+                  <HiEyeOff
+                    className="absolute right-3 top-1/2 h-5 w-5 -translate-y-1/2 cursor-pointer text-slate-500 transition duration-300 hover:text-slate-900"
+                    onClick={togglePassword}
+                  />
+                )}
+              </div>
+            </div>
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <Link to="/" className="text-purple-700 font-semibold transition duration-300 hover:text-purple-900">
+                Go back to Login?
+              </Link>
+              <button
+                type="submit"
+                className="inline-flex items-center justify-center rounded-[14px] bg-gradient-to-r from-slate-600 to-purple-500 px-8 py-4 text-sm font-bold uppercase tracking-[0.08em] text-white shadow-lg shadow-purple-500/20 transition duration-300 hover:-translate-y-1 hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-purple-300"
+              >
+                {loading ? "Loading..." : "Register"}
+              </button>
+            </div>
+          </form>
         </div>
-        
-        <Link to="/" className="text-[#ffda73] font-bold">
-          Go back to Login?
-        </Link>
-        <button
-          onClick={handleRegister}
-          className="hover:bg-[#ffda73aa] hover:text-black bg-[#ffda73] text-white font-bold py-[20px] px-[30px] uppercase w-fit rounded-[7px]"
-        >
-          {loading ? "Loading..." : "Register"}
-        </button>
-      </form>
+      </div>
     </div>
   );
 }
