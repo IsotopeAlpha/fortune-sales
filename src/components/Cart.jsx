@@ -28,7 +28,7 @@ const Cart = ({ cart, removeItem }) => {
 
             {cart.length > 0 ? (
               <div className="space-y-4 p-5">
-                <div className="overflow-x-auto rounded-3xl border border-slate-700 bg-slate-950">
+                <div className="overflow-x-auto rounded-3xl border border-slate-700 bg-black">
                   <table className="min-w-full divide-y divide-slate-700">
                     <thead className="bg-slate-900">
                       <tr>
@@ -47,25 +47,25 @@ const Cart = ({ cart, removeItem }) => {
                         <th className="px-4 py-3"></th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-800 bg-slate-950">
+                    <tbody className="w-fit divide-y divide-slate-800 bg-slate-950">
                       {cart.map((item, index) => (
                         <tr key={index}>
-                          <td className="px-4 py-4">
+                          <td className="min-w-fit px-4 py-4">
                             <div className="flex items-center gap-3">
                               <img
                                 src={item?.imageUrl}
-                                alt={item.name}
-                                className="h-14 w-14 rounded-2xl object-cover"
+                                alt={item?.name}
+                                className="h-14 w-14 rounded-2xl object-cover hidden sm:block"
                               />
                               <div>
-                                <div className="font-medium">{item.name}</div>
-                                <div className="text-xs text-slate-500">{item.category ?? ""}</div>
+                                <div className="font-medium">{item?.name}</div>
+                                <div className="text-xs text-slate-500">{item?.category ?? ""}</div>
                               </div>
                             </div>
                           </td>
-                          <td className="px-4 py-4 text-slate-200">GH¢ {item.price}</td>
-                          <td className="px-4 py-4 text-slate-200">{item.quantity}</td>
-                          <td className="px-4 py-4 text-slate-200">GH¢ {(item.price * item.quantity)}</td>
+                          <td className="px-4 py-4 text-slate-200 min-w-fit">GH¢ {item?.price}</td>
+                          <td className="px-4 py-4 text-slate-200 min-w-fit">{item?.quantity}</td>
+                          <td className="px-4 py-4 text-slate-200 min-w-fit">GH¢ {(item?.price * item?.quantity)}</td>
                           <td className="px-4 py-4">
                             <button
                               onClick={() => removeItem(index)}
@@ -85,21 +85,21 @@ const Cart = ({ cart, removeItem }) => {
                     <p className="text-sm text-slate-400">Order total</p>
                     <p className="mt-1 text-2xl font-semibold">GH¢ {total}</p>
                   </div>
-                  <div className="mt-4 flex flex-col gap-3 sm:mt-0 sm:flex-row">
+                  <div className="mt-4 flex flex-wrap gap-3 sm:mt-0 sm:flex-row">
                     <Link to="/checkout">
                       <button
                         onClick={() => {
                           localStorage.setItem("cart", JSON.stringify(cart));
                           setViewCart(false);
                         }}
-                        className="inline-flex items-center justify-center rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-black shadow-lg shadow-violet-500/20 transition hover:bg-violet-400"
+                        className="inline-flex w-fit items-center justify-center rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-black shadow-lg shadow-violet-500/20 transition hover:bg-violet-400"
                       >
                         Place Order
                       </button>
                     </Link>
                     <button
                       onClick={() => setViewCart(false)}
-                      className="inline-flex items-center justify-center rounded-2xl border border-slate-700 bg-slate-900 px-5 py-3 text-sm font-semibold text-black transition hover:bg-slate-800"
+                      className="inline-flex w-fit items-center justify-center rounded-2xl border border-slate-700 bg-slate-900 px-5 py-3 text-sm font-semibold text-black transition hover:bg-slate-800"
                     >
                       Continue Shopping
                     </button>

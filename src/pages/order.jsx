@@ -159,7 +159,7 @@ export default function OrderPage() {
                         {(item?.price || 0) * (item?.quantity || 0)}
                       </p>
                       <button
-                        className="inline-flex justify-center rounded-2xl bg-red-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-red-700"
+                        className="inline-flex justify-center rounded-2xl bg-white border border-slate-300 shadow-lg px-4 py-2 text-sm font-semibold text-black transition hover:bg-red-700"
                         onClick={() => handleRemoveItem(index)}
                       >
                         Remove
@@ -294,7 +294,7 @@ export default function OrderPage() {
               <button
                 type="submit"
                 onClick={handlePlaceOrder}
-                className="w-full rounded-3xl bg-slate-900 px-6 py-3 text-base font-semibold text-white transition hover:bg-slate-800"
+                className="w-full rounded-3xl border shadow-lg bg-white px-6 py-3 text-base font-semibold text-black transition hover:bg-slate-800"
               >
                 {loading ? "Placing Order..." : "Place Order"}
               </button>
