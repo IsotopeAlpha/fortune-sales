@@ -11,6 +11,7 @@ export default function Profile() {
   const navigate = useNavigate();
   const storedUser = localStorage.getItem("user");
   const user = storedUser ? JSON.parse(storedUser)?.data : null;
+  console.log("User data:", user);
   const [email, setEmail] = useState(user?.email || "");
   const [name, setName] = useState(user?.name || "");
   const [gender, setGender] = useState(user?.gender || "");
@@ -31,8 +32,8 @@ export default function Profile() {
       );
 
       if (res.data.status === "success") {
-        toast.success(res.data.message || res.data.msg);
-        navigate("/home");
+        toast.success(res.data.message || res.data.msg || "Profile updated successfully");
+        
       } else {
         toast.error(
           "Error updating profile. Check your parameters and try again.",
@@ -86,12 +87,14 @@ export default function Profile() {
             type="email"
             label="Email"
             value={email}
+            defaultValue={user?.email}
             width="w-full"
             onChange={(e) => setEmail(e.target.value)}
           />
           <MyTextbox
             label="Full Name"
             value={name}
+            defaultValue={user?.name}
             width="w-full"
             onChange={(e) => setName(e.target.value)}
           />
@@ -113,16 +116,9 @@ export default function Profile() {
             label="Phone"
             type="number"
             value={phone}
+            defaultValue={user?.phone}
             width="w-full"
             onChange={(e) => setPhone(e.target.value)}
-          />
-
-          <MyTextbox
-            label="Location"
-            type="text"
-            value={location}
-            width=" w-full"
-            onChange={(e) => setLocation(e.target.value)}
           />
 
           <button
