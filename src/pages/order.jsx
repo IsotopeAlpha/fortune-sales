@@ -49,7 +49,7 @@ export default function OrderPage() {
       toast.error("Cart is empty. Add items before placing an order.");
       return;
     }
-    if (!customerInfo.name || !customerInfo.email || !customerInfo.address) {
+    if (!customerInfo.name || !customerInfo.email || !customerInfo.address || !customerInfo.city || !customerInfo.postalCode ) {
       toast.error("Please fill in all required fields.");
       return;
     }
@@ -68,7 +68,7 @@ export default function OrderPage() {
         0,
       ),
     };
-    console.log("Placing order with data:", data);
+
      try {
       await axios
         .post(`${import.meta.env.VITE_BASE_URL}orders`, data)
