@@ -7,17 +7,33 @@ import { Link } from "react-router-dom";
 import BackGround from "../assets/background.jpeg";
 import { RiUserCommunityFill } from "react-icons/ri";
 import { CgLogOff } from "react-icons/cg";
+import { AiOutlineWhatsApp } from "react-icons/ai";
 
 export default function HomePage() {
   const [cart, setCart] = useState([]);
   const [total, setTotal] = useState(0);
   const [products, setProducts] = useState(null);
+  const [categories, setCategories] = useState(["All"]);
+  const [selectedCategory, setSelectedCategory] = useState("All");
 
   const getProducts = async () => {
     const response = await axios.get(
       `${import.meta.env.VITE_BASE_URL}products`,
     );
-    setProducts(response.data.data);
+    const fetchedProducts = response.data.data;
+    setProducts(fetchedProducts || []);
+
+    const categorySet = new Set(["All"]);
+    (fetchedProducts || []).forEach((product) => {
+      const category =
+        product?.category ||
+        product?.category?.name ||
+        product?.category?.title;
+      if (category) {
+        categorySet.add(category);
+      }
+    });
+    setCategories(Array.from(categorySet));
   };
 
   const removeItem = (index) => {
@@ -48,6 +64,17 @@ export default function HomePage() {
     setCart([...cart, product]);
   };
 
+  const filteredProducts =
+    selectedCategory === "All"
+      ? products
+      : products.filter((product) => {
+          const category =
+            product?.category ||
+            product?.category?.name ||
+            product?.category?.title;
+          return category === selectedCategory;
+        });
+
   return products === null ? (
     <main className="min-h-screen min-w-screen bg-gradient-to-br from-violet-900 via-purple-800 to-slate-950 flex items-center justify-center px-6 py-10 text-white">
       <div className="flex flex-col items-center justify-center gap-8 rounded-[2rem] border border-white/10 bg-white/10 p-10 shadow-2xl shadow-black/40 backdrop-blur-xl">
@@ -60,7 +87,10 @@ export default function HomePage() {
       </div>
     </main>
   ) : (
-    <main className="relative min-h-screen max-w-screen bg-slate-950 text-slate-50">
+    <main
+      id="top"
+      className="relative min-h-screen max-w-screen bg-slate-950 text-slate-50"
+    >
       <div
         className="pointer-events-none absolute inset-0 bg-cover bg-center opacity-25"
         style={{ backgroundImage: `url(${BackGround})` }}
@@ -81,88 +111,119 @@ export default function HomePage() {
                 them to your cart, and checkout with confidence.
               </p>
             </div>
-            <div className="flex flex-wrap items-center gap-3">
-              <Cart
-                className="rounded-3xl bg-white/10 p-3 text-whiteshadow-lg shadow-black/20 transition hover:bg-white/15"
-                cart={cart}
-                removeItem={removeItem}
-                total={total}
-                color="white"
-              />
-              <Link
-                to="/profile"
-                className="inline-flex h-12 w-12 items-center justify-center rounded-3xl bg-white/10 text-white transition hover:bg-white/20"
-              >
-                <RiUserCommunityFill size={24} />
-              </Link>
-              <Link
-                to="/"
-                className="inline-flex h-12 w-12 items-center justify-center rounded-3xl bg-white/10 text-white transition hover:bg-white/20"
-              >
-                <CgLogOff size={24} />
-              </Link>
-            </div>
+            <div className="flex flex-wrap items-center gap-3"></div>
           </div>
         </header>
 
-        <section className="w-full mt-8 grid gap-8 xl:grid-cols-[1.7fr_1fr]">
-          <div className="w-full rounded-[2rem] border border-white/10 bg-slate-900/80 p-6 shadow-2xl shadow-black/30 backdrop-blur-xl">
-            <div className="flex flex-col gap-6">
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-                <div>
-                  <h2 className="text-2xl font-semibold text-white">
-                    Featured products
-                  </h2>
-                  <p className="mt-2 text-sm text-slate-400">
-                    Select the best items curated just for you and add them to
-                    your cart with one click.
-                  </p>
-                </div>
-                <div className="inline-flex rounded-full bg-violet-500/15 px-4 py-2 text-sm text-violet-200">
-                  {products.length} items available
-                </div>
+        <div className="w-full rounded-[2rem] p-2 ">
+          <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <h2 className="text-2xl font-semibold text-white">
+                  Featured products
+                </h2>
+                <p className="mt-2 text-sm text-slate-400">
+                  Select the best items curated just for you and add them to
+                  your cart with one click.
+                </p>
               </div>
-              <ProductList products={products} onAddToCart={handleAddToCart} />
+              <div className="inline-flex rounded-full bg-violet-500/15 px-4 py-2 text-sm text-violet-200">
+                {products.length} items available
+              </div>
+            </div>
+            <div className="mt-6 flex flex-wrap gap-2">
+              {categories.map((category) => (
+                <button
+                  key={category}
+                  type="button"
+                  onClick={() => setSelectedCategory(category)}
+                  className={`rounded-full px-4 py-2 text-sm transition ${
+                    selectedCategory === category
+                      ? "bg-gradient-to-br from-emerald-400 to-emerald-600 text-white"
+                      : "bg-gradient-to-br from-slate-900/90 to-violet-950/90 text-violet-200 hover:bg-violet-500/25"
+                  }`}
+                >
+                  {category}
+                </button>
+              ))}
+            </div>
+            <ProductList
+              products={filteredProducts}
+              onAddToCart={handleAddToCart}
+            />
+          </div>
+        </div>
+
+        <footer className="mt-10 rounded-[2rem] border border-white/10 bg-slate-900/80 px-6 py-8 text-slate-300 shadow-2xl shadow-black/20 backdrop-blur-xl">
+          <div className="mx-auto max-w-6xl">
+            <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <p className="text-sm uppercase tracking-[0.25em] text-violet-300">
+                  Gem Basics
+                </p>
+                <p className="mt-3 max-w-xl text-sm leading-6 text-slate-400">
+                  Built for effortless browsing and checkout, powered by modern
+                  design and fast service.
+                </p>
+              </div>
+              <div className="grid gap-4 sm:grid-flow-col sm:auto-cols-max">
+                <a
+                  href="#top"
+                  className="text-sm text-white transition hover:text-emerald-300"
+                >
+                  Back to top
+                </a>
+                <a
+                  href="mailto:support@gembasics.com"
+                  className="text-sm text-white transition hover:text-emerald-300"
+                >
+                  Support
+                </a>
+                <a
+                  href="https://wa.me/233540222972"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-sm text-white transition hover:text-emerald-300"
+                >
+                  WhatsApp
+                </a>
+              </div>
+            </div>
+            <div className="mt-6 border-t border-white/10 pt-4 text-sm text-slate-500">
+              © {new Date().getFullYear()} Gem Basics. All rights reserved.
             </div>
           </div>
-
-          <aside className="h-fit rounded-[2rem] border border-white/10 bg-gradient-to-br from-slate-900/90 to-violet-950/90 p-6 shadow-2xl shadow-black/30 backdrop-blur-xl">
-            <div className="mb-6">
-              <h2 className="text-2xl font-semibold text-white">
-                Order summary
-              </h2>
-              <p className="mt-2 text-sm text-slate-400">
-                Track your cart activity and see your total in real time.
-              </p>
-            </div>
-            <div className="space-y-4">
-              <div className="rounded-[1.75rem] bg-white/5 p-6">
-                <p className="text-sm uppercase tracking-[0.25em] text-slate-400">
-                  Items in cart
-                </p>
-                <p className="mt-4 text-5xl font-semibold text-white">
-                  {cart.length}
-                </p>
-              </div>
-              <div className="rounded-[1.75rem] bg-white/5 p-6">
-                <div className="flex items-center justify-between text-slate-300">
-                  <span className="text-sm">Total</span>
-                  <span className="text-4xl font-semibold text-white">
-                    ${total}
-                  </span>
-                </div>
-              </div>
-              <div className="rounded-[1.75rem] border border-white/10 bg-white/5 p-6 text-slate-300">
-                <p className="text-sm text-slate-400">Pro tip:</p>
-                <p className="mt-2 text-sm leading-6">
-                  Add more products to see your cart update instantly and unlock
-                  a smoother checkout experience.
-                </p>
-              </div>
-            </div>
-          </aside>
-        </section>
+        </footer>
       </div>
+      <div className="fixed bottom-20  right-0 z-40 flex items-center justify-center px-4 py-6  sm:px-6">
+        <Cart
+          className="rounded-full bg-white/10 p-3 text-white shadow-2xl shadow-black/20 transition hover:bg-white/15"
+          cart={cart}
+          removeItem={removeItem}
+          total={total}
+          color="white"
+        />
+      </div>
+
+      <a
+        href="https://wa.me/233540222972?text=Hello%2C%20I%20would%20like%20to%20chat%20about%20a%20product."
+        target="_blank"
+        rel="noreferrer"
+        className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-emerald-500 text-white shadow-2xl shadow-black/30 transition hover:bg-emerald-600"
+        aria-label="Chat on WhatsApp"
+      >
+        <AiOutlineWhatsApp
+          size={28}
+          color="white"
+          style={{ animation: "whatsapp-scale 1.5s ease-in-out infinite" }}
+        />
+      </a>
+      <style>{`
+        @keyframes whatsapp-scale {
+          0%, 100% { transform: scale(1); }
+          50% { transform: scale(1.2); }
+        }
+      `}</style>
     </main>
   );
 }

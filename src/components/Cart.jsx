@@ -9,7 +9,7 @@ const Cart = ({ cart, removeItem }) => {
   return (
     <>
       {viewCart ? (
-        <div className="relative fixed inset-0 z-50 flex items-end justify-center bg-black/50 p-4 sm:items-center rounded-3xl">
+        <div className="fixed bottom-0 right-0 left-0 z-50 flex items-end justify-center bg-black p-4 sm:items-center rounded-t-3xl">
           <div className="w-full max-w-3xl overflow-hidden rounded-3xl bg-slate-900 text-white shadow-2xl">
             <div className="flex items-center justify-between border-b border-slate-700 bg-slate-800 px-5 py-4">
               <div>
