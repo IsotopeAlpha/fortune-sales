@@ -100,7 +100,7 @@ export default function OrderPage() {
   );
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 py-10 px-4">
+    <div className="min-h-screen min-w-screen bg-slate-950 text-slate-100 py-10 px-4">
       <ToastContainer />
       <button
         type="button"
