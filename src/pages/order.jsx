@@ -43,13 +43,19 @@ export default function OrderPage() {
     }
   };
 
-  const handlePlaceOrder = async(e) => {
+  const handlePlaceOrder = async (e) => {
     e.preventDefault();
     if (cart.length === 0) {
       toast.error("Cart is empty. Add items before placing an order.");
       return;
     }
-    if (!customerInfo.name || !customerInfo.email || !customerInfo.address || !customerInfo.city || !customerInfo.postalCode ) {
+    if (
+      !customerInfo.name ||
+      !customerInfo.email ||
+      !customerInfo.address ||
+      !customerInfo.city ||
+      !customerInfo.postalCode
+    ) {
       toast.error("Please fill in all required fields.");
       return;
     }
@@ -62,14 +68,14 @@ export default function OrderPage() {
       address: customerInfo.address,
       city: customerInfo.city,
       postalCode: customerInfo.postalCode,
-      products:cart,
+      products: cart,
       totalAmount: cart.reduce(
         (sum, item) => sum + item.price * item.quantity,
         0,
       ),
     };
 
-     try {
+    try {
       await axios
         .post(`${import.meta.env.VITE_BASE_URL}orders`, data)
         .then((res) => {
@@ -83,15 +89,13 @@ export default function OrderPage() {
             toast.success("Order placed successfully!");
             setCart([]);
             localStorage.removeItem("cart");
-            
-          } 
+          }
         });
     } catch (error) {
       throw error;
     }
     console.log("Order placed:", { customerInfo, cart });
     setCart([]);
-    
   };
 
   const totalPrice = cart.reduce(
@@ -100,7 +104,7 @@ export default function OrderPage() {
   );
 
   return (
-    <div className="min-h-screen min-w-screen bg-slate-950 text-slate-100 py-10 px-4">
+    <div className="min-h-screen min-w-screen bg-[#e3e1dc] text-slate-100 py-10 px-4">
       <ToastContainer />
       <button
         type="button"
@@ -110,17 +114,17 @@ export default function OrderPage() {
         ← Back
       </button>
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <h1 className="text-3xl sm:text-mxl font-semibold tracking-tight text-slate-100 mb-8">
+        <h1 className="text-3xl sm:text-mxl font-semibold tracking-tight text-slate-900/80 mb-8">
           Your Order
         </h1>
 
         <div className="grid gap-8 lg:grid-cols-[1.5fr_1fr]">
-          <section className="rounded-3xl border border-slate-700 bg-slate-900 p-6 shadow-sm">
-            <h2 className="text-2xl sm:text-md font-semibold text-slate-100 mb-5">
+          <section className="rounded-3xl border border-slate-700 bg-[#e3e1dc] p-6 shadow-sm">
+            <h2 className="text-2xl sm:text-md font-semibold text-slate-900/80 mb-5">
               Shopping Cart
             </h2>
             {cart.length === 0 ? (
-              <p className="rounded-2xl bg-slate-800 px-4 py-6 text-slate-300">
+              <p className="rounded-2xl bg-slate-900/80 px-4 py-6 text-slate-300">
                 Your cart is empty
               </p>
             ) : (
@@ -128,7 +132,7 @@ export default function OrderPage() {
                 {cart.map((item, index) => (
                   <div
                     key={index}
-                    className="rounded-3xl border border-slate-700 bg-slate-950 p-4 shadow-sm sm:flex sm:items-center sm:justify-between"
+                    className="rounded-3xl border border-slate-700 bg-slate-900/80 p-4 shadow-sm sm:flex sm:items-center sm:justify-between"
                   >
                     <div className="space-y-2 sm:flex-1">
                       <h3 className="text-lg font-medium text-slate-100">
@@ -159,7 +163,7 @@ export default function OrderPage() {
                         {(item?.price || 0) * (item?.quantity || 0)}
                       </p>
                       <button
-                        className="inline-flex justify-center rounded-full bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-sm shadow-red-950/20 transition duration-200 hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-500/30"
+                        className="inline-flex justify-center rounded-full bg-[#e3e1dc] px-4 py-2 text-sm font-semibold text-slate-900/80 shadow-sm shadow-red-950/20 transition duration-200 hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-500/30"
                         onClick={() => handleRemoveItem(index)}
                       >
                         Remove
@@ -177,8 +181,8 @@ export default function OrderPage() {
             )}
           </section>
 
-          <section className="rounded-3xl border border-slate-700 bg-slate-900 p-6 shadow-sm">
-            <h2 className="text-2xl sm:text-md font-semibold text-slate-100 mb-5">
+          <section className="rounded-3xl border border-slate-700 bg-[#e3e1dc] p-6 shadow-sm">
+            <h2 className="text-2xl sm:text-md font-semibold text-slate-900/80 mb-5">
               Shipping Information
             </h2>
             <form onSubmit={handlePlaceOrder} className="space-y-4">
@@ -186,7 +190,7 @@ export default function OrderPage() {
                 <div className="space-y-2">
                   <label
                     htmlFor="name"
-                    className="text-sm font-medium text-slate-200"
+                    className="text-sm font-medium text-slate-900/80"
                   >
                     Name *
                   </label>
@@ -197,14 +201,14 @@ export default function OrderPage() {
                     value={customerInfo.name}
                     onChange={handleInputChange}
                     required
-                    className="w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-slate-100 focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-700"
+                    className="w-full rounded-2xl border border-slate-700 bg-slate-900/80 px-4 py-3 text-slate-100 focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-700"
                   />
                 </div>
 
                 <div className="space-y-2">
                   <label
                     htmlFor="email"
-                    className="text-sm font-medium text-slate-200"
+                    className="text-sm font-medium text-slate-900/80"
                   >
                     Email *
                   </label>
@@ -215,7 +219,7 @@ export default function OrderPage() {
                     value={customerInfo.email}
                     onChange={handleInputChange}
                     required
-                    className="w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-slate-100 focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-700"
+                    className="w-full rounded-2xl border border-slate-700 bg-slate-900/80 px-4 py-3 text-slate-100 focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-700"
                   />
                 </div>
               </div>
@@ -223,7 +227,7 @@ export default function OrderPage() {
               <div className="space-y-2">
                 <label
                   htmlFor="phone"
-                  className="text-sm font-medium text-slate-200"
+                  className="text-sm font-medium text-slate-900/80"
                 >
                   Phone
                 </label>
@@ -233,14 +237,14 @@ export default function OrderPage() {
                   name="phone"
                   value={customerInfo.phone}
                   onChange={handleInputChange}
-                  className="w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-slate-100 focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-700"
+                  className="w-full rounded-2xl border border-slate-700 bg-slate-900/80 px-4 py-3 text-slate-100 focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-700"
                 />
               </div>
 
               <div className="space-y-2">
                 <label
                   htmlFor="address"
-                  className="text-sm font-medium text-slate-200"
+                  className="text-sm font-medium text-slate-900/80"
                 >
                   Address *
                 </label>
@@ -251,7 +255,7 @@ export default function OrderPage() {
                   value={customerInfo.address}
                   onChange={handleInputChange}
                   required
-                  className="w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-slate-100 focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-700"
+                  className="w-full rounded-2xl border border-slate-700 bg-slate-900/80 px-4 py-3 text-slate-100 focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-700"
                 />
               </div>
 
@@ -259,7 +263,7 @@ export default function OrderPage() {
                 <div className="space-y-2">
                   <label
                     htmlFor="city"
-                    className="text-sm font-medium text-slate-200"
+                    className="text-sm font-medium text-slate-900/80"
                   >
                     City
                   </label>
@@ -269,14 +273,14 @@ export default function OrderPage() {
                     name="city"
                     value={customerInfo.city}
                     onChange={handleInputChange}
-                    className="w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-slate-100 focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-700"
+                    className="w-full rounded-2xl border border-slate-700 bg-slate-900/80 px-4 py-3 text-slate-100 focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-700"
                   />
                 </div>
 
                 <div className="space-y-2">
                   <label
                     htmlFor="postalCode"
-                    className="text-sm font-medium text-slate-200"
+                    className="text-sm font-medium text-slate-900/80"
                   >
                     Postal Code
                   </label>
@@ -286,7 +290,7 @@ export default function OrderPage() {
                     name="postalCode"
                     value={customerInfo.postalCode}
                     onChange={handleInputChange}
-                    className="w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-slate-100 focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-700"
+                    className="w-full rounded-2xl border border-slate-700 bg-slate-900/80 px-4 py-3 text-slate-100 focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-700"
                   />
                 </div>
               </div>

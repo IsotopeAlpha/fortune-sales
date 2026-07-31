@@ -12,9 +12,9 @@ const Product = ({ product, onAddToCart }) => {
   };
 
   return (
-    <div className="max-w-[40vw] overflow-hidden rounded-2xl bg-transparent transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 shadow-lg hover:shadow-black/20">
+    <div className="max-w-[40vw] h-fit overflow-hidden rounded-2xl bg-transparent transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 shadow-lg hover:shadow-black/20">
       <Link to="/product" state={{ product }}>
-        <div className="relative w-full h-40 sm:h-50 overflow-hidden bg-gradient-to-br from-slate-100 to-slate-50">
+        <div className="relative w-full h-fit  overflow-hidden bg-gradient-to-br from-slate-100 to-slate-50">
           <img
             src={
               product?.imageUrl ||
@@ -25,12 +25,12 @@ const Product = ({ product, onAddToCart }) => {
             alt={product?.name}
             className="w-full object-cover transition-transform duration-300 hover:scale-110"
           />
-          <div className="absolute top-3 right-3 inline-flex items-center rounded-full bg-emerald-500 px-3 py-1 text-sm font-bold text-white shadow-lg">
+          <div className="absolute top-3 right-3 inline-flex items-center rounded-full bg-slate-900/80 px-3 py-1 text-sm font-bold text-white shadow-lg">
             GH¢{product?.price}
           </div>
         </div>
       </Link>
-      <div className="p-5 flex flex-col gap-4">
+      <div className="h-full p-5 flex flex-col gap-4 bg-slate-900/80 backdrop-blur-sm">
         <div>
           <h3 className="text-lg font-bold text-slate-2 line-clamp-2">
             {product?.name}

@@ -9,8 +9,8 @@ const Cart = ({ cart, removeItem }) => {
   return (
     <>
       {viewCart ? (
-        <div className="fixed bottom-0 right-0 left-0 z-50 flex items-end justify-center bg-black p-4 sm:items-center rounded-t-3xl">
-          <div className="w-full overflow-hidden rounded-3xl bg-slate-900 text-white shadow-2xl">
+        <div className="fixed bottom-0 right-0 left-0 z-50 flex items-end justify-center bg-slate-900/80 p-4 sm:items-center rounded-t-3xl">
+          <div className="w-full overflow-hidden rounded-3xl bg-[#e3e1dc] text-white shadow-2xl">
             <div className="flex items-center justify-between border-b border-slate-700 bg-slate-800 px-5 py-4">
               <div>
                 <h2 className="text-lg font-semibold">Your Cart</h2>
@@ -47,7 +47,7 @@ const Cart = ({ cart, removeItem }) => {
                         <th className="px-4 py-3"></th>
                       </tr>
                     </thead>
-                    <tbody className="w-fit divide-y divide-slate-800 bg-slate-950">
+                    <tbody className="w-fit divide-y divide-slate-800 bg-slate-900/80">
                       {cart.map((item, index) => (
                         <tr key={index}>
                           <td className="min-w-fit px-4 py-4">

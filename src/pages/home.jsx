@@ -76,31 +76,31 @@ export default function HomePage() {
         });
 
   return products === null ? (
-    <main className="min-h-screen min-w-screen bg-gradient-to-br from-violet-900 via-purple-800 to-slate-950 flex items-center justify-center px-6 py-10 text-white">
-      <div className="flex flex-col items-center justify-center gap-8 rounded-[2rem] border border-white/10 bg-white/10 p-10 shadow-2xl shadow-black/40 backdrop-blur-xl">
+    <main className="min-h-screen min-w-screen bg-[#e3e1dc] flex items-center justify-center px-6 py-10 text-white">
+      <div className="flex flex-col items-center justify-center gap-8 rounded-[2rem] border border-white/10 bg-white/10 p-10">
         <FaRegCircleDot
-          className="animate-ping text-white"
+          className="animate-ping text-slate-900/80"
           size={80}
           thickness={4}
         />
-        <p className="text-3xl font-semibold">Loading...</p>
+        <p className="text-3xl font-semibold text-slate-900/80">Loading...</p>
       </div>
     </main>
   ) : (
     <main
       id="top"
-      className="relative min-h-screen max-w-screen bg-slate-950 text-slate-50"
+      className="relative min-h-screen max-w-screen bg-[#e3e1dc] text-slate-50"
     >
       <div
         className="pointer-events-none absolute inset-0 bg-cover bg-center opacity-25"
         style={{ backgroundImage: `url(${BackGround})` }}
       />
       <div className="relative max-w-screen z-10 mx-auto px-4 py-6 sm:px-6 sm:py-8  overflow-auto">
-        <header className="rounded-[2rem] border border-white/10 bg-slate-900/70 p-6 shadow-2xl shadow-black/30 backdrop-blur-xl">
+        <header className="rounded-[2rem] border border-white/10 bg-slate-900/80 p-6 shadow-2xl shadow-black/30 backdrop-blur-xl">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p className="flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.35em] text-purple-500">
-                <img src="/gem.png" alt="Gem Logo" className="h-10 w-10" />
+                <img src="/logo.png" alt="Gem Logo" className="h-10 w-10" />
                 <h1 className="text-3xl font-semibold tracking-tight text-white">
                   Gem Basics
                 </h1>
@@ -119,15 +119,15 @@ export default function HomePage() {
           <div className="flex flex-col gap-6">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
               <div>
-                <h2 className="text-2xl font-semibold text-white">
+                <h2 className="text-2xl font-semibold text-black sm:text-3xl">
                   Featured products
                 </h2>
-                <p className="mt-2 text-sm text-slate-400">
+                <p className="mt-2 text-sm text-slate-700">
                   Select the best items curated just for you and add them to
                   your cart with one click.
                 </p>
               </div>
-              <div className="inline-flex rounded-full bg-violet-500/15 px-4 py-2 text-sm text-violet-200">
+              <div className="inline-flex rounded-full bg-violet-500/15 px-4 py-2 text-sm text-black/80 shadow-sm shadow-black/10 backdrop-blur-sm">
                 {products.length} items available
               </div>
             </div>
@@ -140,7 +140,7 @@ export default function HomePage() {
                   className={`rounded-full px-4 py-2 text-sm transition ${
                     selectedCategory === category
                       ? "bg-gradient-to-br from-emerald-400 to-emerald-600 text-white"
-                      : "bg-gradient-to-br from-slate-900/90 to-violet-950/90 text-violet-200 hover:bg-violet-500/25"
+                      : "bg-gradient-to-br from-slate-900 to-violet-950/90 text-violet-200 hover:bg-violet-500/25"
                   }`}
                 >
                   {category}
