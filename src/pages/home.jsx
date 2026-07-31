@@ -7,7 +7,9 @@ import { Link } from "react-router-dom";
 import BackGround from "../assets/background.jpeg";
 import { RiUserCommunityFill } from "react-icons/ri";
 import { CgLogOff } from "react-icons/cg";
-import { AiOutlineWhatsApp } from "react-icons/ai";
+import { AiOutlineWhatsApp, AiOutlineArrowUp, AiOutlineMail } from "react-icons/ai";
+import { FaFacebookF, FaInstagram } from "react-icons/fa";
+import { SiTiktok } from "react-icons/si";
 
 export default function HomePage() {
   const [cart, setCart] = useState([]);
@@ -100,7 +102,7 @@ export default function HomePage() {
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p className="flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.35em] text-purple-500">
-                <img src="/logo.png" alt="Gem Logo" className="h-10 w-10" />
+                <img src="/logo.PNG" alt="Gem Logo" className="h-10 w-10" />
                 <h1 className="text-3xl font-semibold tracking-tight text-white">
                   Gem Basics
                 </h1>
@@ -171,13 +173,42 @@ export default function HomePage() {
                   href="#top"
                   className="text-sm text-white transition hover:text-emerald-300"
                 >
+                  <AiOutlineArrowUp size={16} className="mr-2 inline" />
                   Back to top
                 </a>
                 <a
                   href="mailto:support@gembasics.com"
                   className="text-sm text-white transition hover:text-emerald-300"
                 >
+                  <AiOutlineMail size={16} className="mr-2 inline" />
                   Support
+                </a>
+                <a
+                  href="https://www.facebook.com/gembasics"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-sm text-white transition hover:text-emerald-300"
+                >
+                  <FaFacebookF size={16} className="mr-2 inline" />
+                  Facebook
+                </a>
+                <a
+                  href="https://www.instagram.com/gembasics"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-sm text-white transition hover:text-emerald-300"
+                >
+                  <FaInstagram size={16} className="mr-2 inline" />
+                  Instagram
+                </a>
+                <a
+                  href="https://www.tiktok.com/@gembasics"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-sm text-white transition hover:text-emerald-300"
+                >
+                  <SiTiktok size={16} className="mr-2 inline" />
+                  TikTok
                 </a>
                 <a
                   href="https://wa.me/233540222972"
@@ -185,6 +216,7 @@ export default function HomePage() {
                   rel="noreferrer"
                   className="text-sm text-white transition hover:text-emerald-300"
                 >
+                  <AiOutlineWhatsApp size={16} className="mr-2 inline" />
                   WhatsApp
                 </a>
               </div>

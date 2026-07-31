@@ -120,11 +120,11 @@ const Cart = ({ cart, removeItem }) => {
       ) : (
         <button
           onClick={() => setViewCart(true)}
-          className="relative inline-flex items-center justify-center rounded-full text-purple-500 bg-slate-200 shadow-xl shadow-violet-500/30 transition hover:bg-violet-400"
+          className="relative inline-flex items-center justify-center rounded-full bg-white shadow-xl shadow-slate-500/30 transition hover:bg-violet-400"
           aria-label="Open cart"
         >
-          <BiCart size={30} />
-          <span className="absolute -right-1 -top-1 flex h-6 min-w-[24px] items-center justify-center rounded-full  px-1.5 text-xs font-bold text-purple-500 shadow-sm">
+          <BiCart size={30} className="text-slate-900/80"/>
+          <span className="absolute bg-slate-900/80 -right-1 -top-1 flex h-6 min-w-[24px] items-center justify-center rounded-full  px-1.5 text-xs font-bold text-white shadow-sm">
             {cart.length}
           </span>
         </button>
