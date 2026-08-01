@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { usePaystackPayment } from "react-paystack";
 
 export default function OrderPage() {
   const navigate = useNavigate();
@@ -18,6 +19,15 @@ export default function OrderPage() {
     postalCode: "",
   });
   const [loading, setLoading] = useState(false);
+
+  const paystackConfig = {
+    email: customerInfo.email,
+    amount:
+      cart.reduce((sum, item) => sum + item.price * item.quantity, 0) * 100, // Amount in kobo
+    currency: "GHS",
+    publicKey: import.meta.env.VITE_PAYSTACK_PUBLIC_KEY,
+    reference: new Date().getTime().toString(), // Must be unique for every transaction
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -75,27 +85,37 @@ export default function OrderPage() {
       ),
     };
 
-    try {
-      await axios
-        .post(`${import.meta.env.VITE_BASE_URL}orders`, data)
-        .then((res) => {
-          console.log("Order response:", res.data);
+    const initializePayment = usePaystackPayment(paystackConfig);
 
-          if (res.data.status === "error") {
-            setLoading(false);
-            toast.error(res.data.message);
-          } else {
-            setLoading(false);
-            toast.success("Order placed successfully!");
-            setCart([]);
-            localStorage.removeItem("cart");
-          }
-        });
-    } catch (error) {
-      throw error;
-    }
-    console.log("Order placed:", { customerInfo, cart });
-    setCart([]);
+    // Triggered when payment finishes successfully
+    const onSuccess = async (reference) => {
+      try {
+        await axios
+          .post(`${import.meta.env.VITE_BASE_URL}orders`, data)
+          .then((res) => {
+            console.log("Order response:", res.data);
+
+            if (res.data.status === "error") {
+              setLoading(false);
+              toast.error(res.data.message);
+            } else {
+              setLoading(false);
+              toast.success("Order placed successfully!");
+              setCart([]);
+              localStorage.removeItem("cart");
+            }
+          });
+      } catch (error) {
+        throw error;
+      }
+      console.log("Order placed:", { customerInfo, cart });
+      setCart([]);
+    };
+
+    // Triggered when user closes the payment window manually
+    const onClose = () => {
+      toast.error("Payment window closed. Order not completed.");
+    };
   };
 
   const totalPrice = cart.reduce(
