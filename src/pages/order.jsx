@@ -87,35 +87,44 @@ export default function OrderPage() {
 
     const initializePayment = usePaystackPayment(paystackConfig);
 
-    // Triggered when payment finishes successfully
-    const onSuccess = async (reference) => {
-      try {
-        await axios
-          .post(`${import.meta.env.VITE_BASE_URL}orders`, data)
-          .then((res) => {
-            console.log("Order response:", res.data);
+    initializePayment({
+      onSuccess: async (reference) => {
+        try {
+          await axios
+            .post(`${import.meta.env.VITE_BASE_URL}orders`, data)
+            .then((res) => {
+              console.log("Order response:", res.data);
 
-            if (res.data.status === "error") {
-              setLoading(false);
-              toast.error(res.data.message);
-            } else {
-              setLoading(false);
-              toast.success("Order placed successfully!");
-              setCart([]);
-              localStorage.removeItem("cart");
-            }
-          });
-      } catch (error) {
-        throw error;
-      }
-      console.log("Order placed:", { customerInfo, cart });
-      setCart([]);
-    };
+              if (res.data.status === "error") {
+                setLoading(false);
+                toast.error(res.data.message);
+              } else {
+                setLoading(false);
+                toast.success("Order placed successfully!");
+                setCart([]);
+                localStorage.removeItem("cart");
+              }
+            });
 
-    // Triggered when user closes the payment window manually
-    const onClose = () => {
-      toast.error("Payment window closed. Order not completed.");
-    };
+          console.log("Order placed:", { customerInfo, cart });
+          setCart([]);
+          setLoading(false);
+        } catch (error) {
+          toast.error(
+            "Payment was successful, but there was an error verifying or updating your subscription. Please contact support.",
+          );
+          setLoading(false);
+          console.error("Error during payment processing:", error);
+        } finally {
+          setLoading(false);
+        }
+      },
+      onClose: () => {
+        setLoading(false);
+        if (onClose) onClose();
+        toast.error("Payment window closed. Order not completed.");
+      },
+    });
   };
 
   const totalPrice = cart.reduce(
